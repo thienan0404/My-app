@@ -5,8 +5,10 @@
   "description": "Thienan Growth 3.0 — Motivation OS",
   "scripts": {
     "build": "node scripts/build.js",
-    "test": "node --check app.js && node --check sw.js && node tests/smoke.js",
+    "test": "node --check app.js && node --check sw.js && node tests/smoke.js && node --check cloud-app.js && node tests/cloud-sync.js && node tests/cloud-account.js",
     "preview": "node scripts/preview.js"
   },
-  "engines": { "node": ">=22" }
+  "engines": {
+    "node": ">=22"
+  }
 }

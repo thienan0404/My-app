@@ -12,7 +12,7 @@ npm run build
 npm run preview
 ```
 
-Build kiểm tra cú pháp và tài nguyên rồi tạo `dist/` gồm 9 tệp phục vụ website/PWA. Preview mở tại `http://127.0.0.1:4173`. GitHub Actions tự chạy test, build và lưu artifact khi push hoặc tạo pull request. Thư mục `dist/` được sinh lại từ mã nguồn và không đưa vào Git.
+Build kiểm tra cú pháp và tài nguyên rồi tạo `dist/` gồm 12 tệp phục vụ website/PWA. Preview mở tại `http://127.0.0.1:4173`. GitHub Actions tự chạy test, build và lưu artifact khi push hoặc tạo pull request. Thư mục `dist/` được sinh lại từ mã nguồn và không đưa vào Git.
 
 Giao diện điện thoại có thanh điều hướng cố định, menu “Thêm” để mở đủ các mục, bố cục checklist gọn và vùng chạm lớn. `mobile.css` điều chỉnh màn hình 320–680 px; biểu mẫu dùng chữ 16 px để tránh tự phóng to khi nhập trên iPhone.
 
@@ -44,17 +44,21 @@ Nếu dùng đồng bộ Supabase, thêm URL Render thực tế vào Site URL v�
 
 ## Thiết lập Supabase để dùng nhiều thiết bị
 
-Không có URL và publishable/anon key nào được nhúng sẵn vì đây phải là **dự án Supabase do bạn sở hữu**.
+Ứng dụng dùng Supabase Auth và một bản dữ liệu riêng cho mỗi người dùng. Khi chưa nối dịch vụ hoặc chưa đăng nhập, app tiếp tục lưu trên thiết bị.
 
 1. Tạo dự án trong Supabase → SQL Editor → chạy `supabase_schema.sql`. File đã có Row Level Security, dữ liệu chỉ truy cập được bởi tài khoản sở hữu.
-2. Authentication → Providers → bật Email OTP/Magic Link. URL Configuration → thêm URL public Vercel của website vào **Site URL** và **Redirect URLs**.
-3. Mở website đã deploy bằng HTTPS → **Cài đặt & dữ liệu → Đồng bộ Supabase** → nhập Project URL và **publishable/anon key** (không dùng service_role) → nhập email → bấm gửi link → mở email và đăng nhập.
-4. Nhấn **Tải dữ liệu lên** (thiết bị đang có dữ liệu) hoặc **Tải dữ liệu xuống** (thiết bị mới). Mỗi thao tác có hộp thoại xác nhận trước khi **ghi đè** dữ liệu. Đây là sync snapshot **thủ công**, chưa có background realtime/merge xung đột.
+2. Authentication → Providers → bật Email OTP/Magic Link. URL Configuration → đặt **Site URL** và **Redirect URLs** là `https://thienan-growth.onrender.com/` (thêm URL localhost nếu kiểm thử).
+3. Cấu hình hai biến môi trường build trên Render: `SUPABASE_URL` và `SUPABASE_PUBLISHABLE_KEY`, rồi deploy. Chỉ dùng publishable/anon key. Build tạo `cloud-config.js` công khai, không chấp nhận secret/service_role key. Nếu chưa có cấu hình chung, có thể nhập kết nối trong phần mở rộng của Cài đặt.
+4. Mở **Cài đặt & dữ liệu → Đồng bộ giữa các thiết bị**, nhập cùng một email trên mỗi thiết bị và mở link đăng nhập trong trình duyệt dùng app. Thiết bị đầu tiên đưa tiến độ đang có lên cloud; thiết bị mới nhận dữ liệu cloud. App tự gửi thay đổi sau 650 ms và lấy cập nhật mỗi 20 giây khi đang mở, khi quay lại tab hoặc có mạng. Nút **Đồng bộ ngay** cập nhật theo yêu cầu. Thay đổi khi mất mạng được giữ để gửi lại.
 5. Xem các chính sách RLS trong SQL trước khi dùng thực tế. Dữ liệu nhật ký nằm trong Supabase JSONB, **không có mã hóa đầu cuối**.
+
+Đồng bộ gộp theo từng mục: hai dấu tích khác nhau, hai công việc tự thêm và hai phiên tập trung không ghi đè lẫn nhau. Database dùng revision và compare-and-swap trong transaction để thử lại khi có cập nhật đồng thời. Nếu hai thiết bị sửa cùng một mục, thay đổi được gửi thành công sau cùng sẽ thắng. Bỏ tích, xóa công việc, nhập backup và reset cũng đồng bộ. Snapshot dự phòng và lịch sử thông báo chỉ lưu tại thiết bị.
+
+Đăng xuất giữ bản riêng của tài khoản tại thiết bị và làm trống giao diện. Đăng nhập tài khoản khác không gửi nhật ký/kết quả của tài khoản trước. Chưa có đồng bộ khi app đã đóng; thay đổi nhận khi mở lại. Các test mô phỏng hai thiết bị, lỗi mạng, tải lại, sửa trong lúc upload và đổi tài khoản chạy trong `npm test`. Cần kiểm tra thêm Auth/RLS với dự án Supabase thực sau khi nối dịch vụ.
 
 ## Những thứ chưa thể chạy cho đến khi nối dịch vụ
 
-- Chưa có URL hosting công khai do chưa deploy lên tài khoản Vercel/GitHub của người dùng.
+- Website đã triển khai tại https://thienan-growth.onrender.com/.
 - Supabase chỉ hoạt động khi bạn cấu hình dự án và đăng nhập, và có kết nối internet.
 - **Không có push notifications nền khi app đã đóng.** Dùng xuất file `.ics` sang Calendar để có thông báo khi trang web đã đóng. Push thật cần VAPID/service worker Push API, bảng subscription, scheduler/Edge Functions, quản lý múi giờ và opt-in.
 - Không có AI tự học / GPT API; gợi ý thông minh là thuật toán theo quy tắc dựa trên dữ liệu checklist.
@@ -66,7 +70,7 @@ Dữ liệu nhật ký nên được xem là riêng tư. File backup JSON chứa
 
 ## Kiểm tra
 
-Đã kiểm tra cú pháp JavaScript và chạy `node tests/smoke.js`: khởi tạo app, điều hướng, chế độ động lực, cài đặt, 183 ngày, XP không cộng trùng và có thể hoàn tác. Việc render đồ họa thực trên Chromium/thiết bị di động chưa được kiểm thử end-to-end trong môi trường này. Sync cloud cần tài khoản Supabase thật nên phải kiểm tra tiếp trong môi trường chủ tài khoản.
+`npm test` kiểm tra khởi tạo, điều hướng mobile, cài đặt, 183 ngày, XP không cộng trùng, đồng bộ hai thiết bị và tách dữ liệu giữa các tài khoản. Giao diện được kiểm tra trên trình duyệt ở kích thước điện thoại; chưa kiểm tra trên iPhone thật. Auth/RLS cần kiểm tra với dự án Supabase thực sau khi nối dịch vụ.
 
 
 ## Lịch mới 12/10/2026

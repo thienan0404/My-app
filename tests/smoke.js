@@ -10,7 +10,7 @@ const context={
   localStorage:{getItem:key=>storage.get(key)||null,setItem:(key,val)=>storage.set(key,val)},
   location:{protocol:'file:'},navigator:{},console,setTimeout,clearTimeout,setInterval:()=>1,clearInterval:()=>{},Event:function(){},Intl,Date,Math,Object,Array,Number,String
 };
-context.globalThis=context;vm.createContext(context);vm.runInContext(code,context);
+context.globalThis=context;context.createGrowthCloudController=()=>({html:()=>'<div id=\"cloud-url\"></div>',capture(){},init(){},status(){},action(){}});vm.createContext(context);vm.runInContext(code,context);
 assert.match(get('app').innerHTML,/xp-banner/);assert.match(get('side-nav').innerHTML,/motivation/);
 function click(action,extra={}){const node={dataset:{action,...extra},value:extra.value};for(const fn of events.click||[])fn({target:{closest:sel=>sel==='[data-action]'?node:null}})}
 assert.match(get('mobile-nav').innerHTML,/data-action="mobile-more"/);
