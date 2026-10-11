@@ -1,0 +1,11 @@
+{
+  "name": "Thienan Growth 3.0 — Motivation OS",
+  "short_name": "Growth",
+  "description": "183 ngày phát triển bản thân và tự động hóa",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f6f7fb",
+  "theme_color": "#101c32",
+  "icons": [{"src":"./public/favicon.svg","sizes":"any","type":"image/svg+xml","purpose":"any"}]
+}

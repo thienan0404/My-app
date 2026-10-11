@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#171f35">
+  <meta name="description" content="Thienan Growth 3.0 — động lực, thói quen, tự động hóa và theo dõi 183 ngày.">
+  <title>Thienan Growth 3.0 · Motivation OS</title>
+  <link rel="icon" href="./public/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./theme-v2.css">
+  <link rel="stylesheet" href="./motivation.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Điều hướng chính">
+      <div class="brand"><div class="brand-logo">T<span>.</span></div><div><strong>THIENAN</strong><small>MOTIVATION OS</small></div></div>
+      <div class="sidebar-heading">KHÔNG GIAN CỦA BẠN</div>
+      <nav id="side-nav"></nav>
+      <div class="sidebar-bottom">
+        <div class="small-label">183 NGÀY PHÁT TRIỂN</div>
+        <div id="sidebar-remaining" class="sidebar-target">Ngày 01 / 183</div>
+        <div class="mini-track"><div id="sidebar-progress" class="mini-track-fill"></div></div>
+        <div class="sidebar-footer">Tiến bộ từng chút một. Vì chính mình.</div>
+      </div>
+    </aside>
+    <div class="right-shell">
+      <header class="topbar"><div class="topbar-left"><span id="breadcrumbs">Tổng quan</span><span class="crumb-sep">/</span><span id="header-date">—</span></div><div class="topbar-right"><span class="status-dot"></span><span>Personal Workspace</span><button class="header-cta" data-action="nav" data-view="automations"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="m13 2-3 8H5l9 12 3-9h-6l2-11Z"/></svg> Automation</button><div class="avatar">TA</div></div></header>
+      <main id="app" class="main-content"></main>
+      <footer class="app-footer">Made for growth, not perfection. <span>·</span> 12.10.2026 → 12.04.2027</footer>
+    </div>
+  </div>
+  <nav class="mobile-nav" id="mobile-nav" aria-label="Điều hướng điện thoại"></nav>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <input type="file" id="backup-import" accept=".json,application/json" hidden>
+  <script defer src="./app.js"></script>
+</body>
+</html>
