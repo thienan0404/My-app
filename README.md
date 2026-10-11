@@ -44,6 +44,8 @@ Nếu dùng đồng bộ Supabase, thêm URL Render thực tế vào Site URL v�
 
 ## Thiết lập Supabase để dùng nhiều thiết bị
 
+Website Render hiện dùng dự án Supabase `hgyqnefstfxxjboncpbp` (Singapore) của tài khoản mới. Project URL và publishable key được cấu hình trong biến môi trường Render; Site URL và Redirect URL đều là `https://thienan-growth.onrender.com/`. Người dùng đăng nhập app bằng link email, riêng với phiên đăng nhập Dashboard Supabase.
+
 Ứng dụng dùng Supabase Auth và một bản dữ liệu riêng cho mỗi người dùng. Khi chưa nối dịch vụ hoặc chưa đăng nhập, app tiếp tục lưu trên thiết bị.
 
 1. Tạo dự án trong Supabase → SQL Editor → chạy `supabase_schema.sql`. File đã có Row Level Security, dữ liệu chỉ truy cập được bởi tài khoản sở hữu.
@@ -54,7 +56,9 @@ Nếu dùng đồng bộ Supabase, thêm URL Render thực tế vào Site URL v�
 
 Đồng bộ gộp theo từng mục: hai dấu tích khác nhau, hai công việc tự thêm và hai phiên tập trung không ghi đè lẫn nhau. Database dùng revision và compare-and-swap trong transaction để thử lại khi có cập nhật đồng thời. Nếu hai thiết bị sửa cùng một mục, thay đổi được gửi thành công sau cùng sẽ thắng. Bỏ tích, xóa công việc, nhập backup và reset cũng đồng bộ. Snapshot dự phòng và lịch sử thông báo chỉ lưu tại thiết bị.
 
-Đăng xuất giữ bản riêng của tài khoản tại thiết bị và làm trống giao diện. Đăng nhập tài khoản khác không gửi nhật ký/kết quả của tài khoản trước. Chưa có đồng bộ khi app đã đóng; thay đổi nhận khi mở lại. Các test mô phỏng hai thiết bị, lỗi mạng, tải lại, sửa trong lúc upload và đổi tài khoản chạy trong `npm test`. Cần kiểm tra thêm Auth/RLS với dự án Supabase thực sau khi nối dịch vụ.
+Đăng xuất giữ bản riêng của tài khoản tại thiết bị và làm trống giao diện. Đăng nhập tài khoản khác không gửi nhật ký/kết quả của tài khoản trước. Chưa có đồng bộ khi app đã đóng; thay đổi nhận khi mở lại. Các test mô phỏng hai thiết bị, lỗi mạng, tải lại, sửa trong lúc upload và đổi tài khoản chạy trong `npm test`.
+
+Đã chạy `tests/cloud-database.sql` trên database thật: xác nhận RLS tách dữ liệu giữa hai tài khoản, chặn truy cập ẩn danh, ghi dữ liệu thành công và từ chối revision cũ. Test dùng transaction và rollback toàn bộ dữ liệu tạm. Luồng gửi link đăng nhập đã hoạt động trên website; người dùng mở link email để hoàn tất đăng nhập app.
 
 ## Những thứ chưa thể chạy cho đến khi nối dịch vụ
 
@@ -70,7 +74,7 @@ Dữ liệu nhật ký nên được xem là riêng tư. File backup JSON chứa
 
 ## Kiểm tra
 
-`npm test` kiểm tra khởi tạo, điều hướng mobile, cài đặt, 183 ngày, XP không cộng trùng, đồng bộ hai thiết bị và tách dữ liệu giữa các tài khoản. Giao diện được kiểm tra trên trình duyệt ở kích thước điện thoại; chưa kiểm tra trên iPhone thật. Auth/RLS cần kiểm tra với dự án Supabase thực sau khi nối dịch vụ.
+`npm test` kiểm tra khởi tạo, điều hướng mobile, cài đặt, 183 ngày, XP không cộng trùng, đồng bộ hai thiết bị và tách dữ liệu giữa các tài khoản. Test SQL đã chạy trên Supabase thật. Giao diện được kiểm tra trên trình duyệt ở kích thước điện thoại; chưa kiểm tra trên iPhone thật.
 
 
 ## Lịch mới 12/10/2026
