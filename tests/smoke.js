@@ -2,7 +2,7 @@
 const fs=require('node:fs');const vm=require('node:vm');const path=require('node:path');const assert=require('node:assert/strict');
 const code=fs.readFileSync(path.join(__dirname,'..','app.js'),'utf8');
 const els={};const events={};const classes={add(){},remove(){},toggle(){}};
-const get=(id)=>els[id]||(els[id]={innerHTML:'',textContent:'',value:'',style:{},classList:classes,addEventListener(type,cb){events[id+':'+type]=cb}});
+const get=(id)=>els[id]||(els[id]={innerHTML:'',textContent:'',value:'',open:false,style:{},classList:classes,setAttribute(name,value){this[name]=value},showModal(){this.open=true},close(){this.open=false;events[id+':close']?.()},addEventListener(type,cb){events[id+':'+type]=cb}});
 const storage=new Map();
 const context={
   document:{hidden:false,body:{dataset:{},append(){}},getElementById:get,querySelector:sel=>get(sel),addEventListener(type,cb){(events[type]??=[]).push(cb)}},
@@ -13,6 +13,12 @@ const context={
 context.globalThis=context;vm.createContext(context);vm.runInContext(code,context);
 assert.match(get('app').innerHTML,/xp-banner/);assert.match(get('side-nav').innerHTML,/motivation/);
 function click(action,extra={}){const node={dataset:{action,...extra},value:extra.value};for(const fn of events.click||[])fn({target:{closest:sel=>sel==='[data-action]'?node:null}})}
+assert.match(get('mobile-nav').innerHTML,/data-action="mobile-more"/);
+assert.match(get('mobile-more-links').innerHTML,/data-view="journal"/);
+click('mobile-more');assert.equal(get('mobile-more').open,true);
+click('nav',{view:'journal'});assert.equal(get('mobile-more').open,false);assert.match(get('app').innerHTML,/journal-text/);
+click('mobile-more');click('close-mobile-more');assert.equal(get('mobile-more').open,false);
+console.log('PASS: mobile menu opens, journal is reachable, navigation and dismissal close the dialog.');
 click('nav',{view:'motivation'});assert.match(get('app').innerHTML,/badge-grid/);assert.match(get('app').innerHTML,/plant-visual/);
 click('energy-mode',{mode:'discipline'});assert.equal(JSON.parse(storage.get('thienan-growth-v1')).settings.mode,'discipline');
 click('nav',{view:'focus'});assert.match(get('app').innerHTML,/focus-clock/);

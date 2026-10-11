@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#171f35">
   <meta name="description" content="Thienan Growth 3.0 — động lực, thói quen, tự động hóa và theo dõi 183 ngày.">
   <title>Thienan Growth 3.0 · Motivation OS</title>
@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="./style.css">
   <link rel="stylesheet" href="./theme-v2.css">
   <link rel="stylesheet" href="./motivation.css">
+  <link rel="stylesheet" href="./mobile.css">
 </head>
 <body>
   <div class="app-shell">
@@ -32,6 +33,12 @@
     </div>
   </div>
   <nav class="mobile-nav" id="mobile-nav" aria-label="Điều hướng điện thoại"></nav>
+  <dialog class="mobile-menu" id="mobile-more" aria-labelledby="mobile-more-title">
+    <div class="mobile-menu-sheet">
+      <div class="mobile-menu-heading"><div><span class="eyebrow">THIENAN GROWTH</span><h2 id="mobile-more-title">Không gian của bạn</h2></div><button class="mobile-menu-close" type="button" data-action="close-mobile-more" aria-label="Đóng menu">×</button></div>
+      <nav id="mobile-more-links" aria-label="Các mục khác"></nav>
+    </div>
+  </dialog>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <input type="file" id="backup-import" accept=".json,application/json" hidden>
   <script defer src="./app.js"></script>

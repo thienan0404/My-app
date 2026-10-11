@@ -12,7 +12,9 @@ npm run build
 npm run preview
 ```
 
-Build kiểm tra cú pháp và tài nguyên rồi tạo `dist/` gồm 8 tệp phục vụ website/PWA. Preview mở tại `http://127.0.0.1:4173`. GitHub Actions tự chạy test, build và lưu artifact khi push hoặc tạo pull request. Thư mục `dist/` được sinh lại từ mã nguồn và không đưa vào Git.
+Build kiểm tra cú pháp và tài nguyên rồi tạo `dist/` gồm 9 tệp phục vụ website/PWA. Preview mở tại `http://127.0.0.1:4173`. GitHub Actions tự chạy test, build và lưu artifact khi push hoặc tạo pull request. Thư mục `dist/` được sinh lại từ mã nguồn và không đưa vào Git.
+
+Giao diện điện thoại có thanh điều hướng cố định, menu “Thêm” để mở đủ các mục, bố cục checklist gọn và vùng chạm lớn. `mobile.css` điều chỉnh màn hình 320–680 px; biểu mẫu dùng chữ 16 px để tránh tự phóng to khi nhập trên iPhone.
 
 Để deploy trên hosting tĩnh, dùng lệnh build `npm run build` và output directory `dist`. Nếu dùng GitHub Pages, tải nội dung `dist/` lên Pages. Tệp SQL chỉ dùng để cấu hình Supabase, không nằm trong bản website.
 

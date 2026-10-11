@@ -6,7 +6,7 @@ const { execFileSync } = require('node:child_process');
 const root = path.resolve(__dirname, '..');
 const output = path.join(root, 'dist');
 const assets = [
-  'index.html', 'app.js', 'style.css', 'theme-v2.css', 'motivation.css',
+  'index.html', 'app.js', 'style.css', 'theme-v2.css', 'motivation.css', 'mobile.css',
   'sw.js', 'manifest.webmanifest', 'public/favicon.svg'
 ];
 
