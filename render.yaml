@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: thienan-growth
+    runtime: static
+    repo: https://github.com/thienan0404/My-app
+    branch: main
+    buildCommand: npm test && npm run build
+    staticPublishPath: ./dist
+    autoDeployTrigger: commit
+    headers:
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+      - path: /sw.js
+        name: Cache-Control
+        value: no-cache
+      - path: /index.html
+        name: Cache-Control
+        value: no-cache

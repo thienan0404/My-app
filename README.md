@@ -16,6 +16,14 @@ Build kiểm tra cú pháp và tài nguyên rồi tạo `dist/` gồm 8 tệp ph
 
 Để deploy trên hosting tĩnh, dùng lệnh build `npm run build` và output directory `dist`. Nếu dùng GitHub Pages, tải nội dung `dist/` lên Pages. Tệp SQL chỉ dùng để cấu hình Supabase, không nằm trong bản website.
 
+## Triển khai trên Render
+
+Repo có `render.yaml` để tạo Static Site bằng Render Blueprint từ nhánh `main`. Lệnh triển khai là `npm test && npm run build`, publish directory là `dist`, Node.js 22 được xác định trong `.node-version`. Render tự deploy lại khi nhánh `main` có commit mới.
+
+Mở https://dashboard.render.com/select-repo?type=blueprint và chọn repo `thienan0404/My-app`, kiểm tra cấu hình rồi tạo Blueprint. Nếu tạo Static Site trực tiếp, chọn cùng repo/nhánh, nhập Build Command `npm test && npm run build` và Publish Directory `dist`. Ứng dụng không cần Start Command hoặc biến môi trường.
+
+Nếu dùng đồng bộ Supabase, thêm URL Render thực tế vào Site URL và Redirect URLs trong Supabase sau khi deploy.
+
 ## Chạy ngay
 
 - Mở `index.html` để trải nghiệm nhanh (offline). Tính năng nhắc hệ thống/đăng nhập có thể bị hạn chế ở chế độ `file://`.
